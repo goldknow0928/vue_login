@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-5">{{ userInfo.name }}안녕하세요!</div>
+  <div class="pa-5">{{ userInfo.name }}안녕하세요!!!!</div>
 </template>
 
 <script>
