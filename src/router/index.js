@@ -26,7 +26,7 @@ const onlyAuthUser = (to, from, next) => {
 
 const routes = [
   {
-    path: "/",
+    path: "/home",
     name: "home",
     component: () => import(/* webpackChunkName: "home" */ "@/views/Home.vue"),
   },
