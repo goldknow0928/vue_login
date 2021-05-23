@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "@/router";
+import axios from "axios";
 
 Vue.use(Vuex);
 
@@ -47,30 +48,46 @@ export default new Vuex.Store({
   },
   actions: {
     //로그인 시도
-    login({ state, commit }, loginObj) {
-      //전체 유저에서 해당 이메일로 유저를 찾는다
-      let selectedUser = null;
-      state.allUsers.forEach((user) => {
-        if (user.email === loginObj.email) selectedUser = user;
-      });
-
-      //그 유저의 비밀번호와 입력된 비밀번호를 비교한다
-      // selectedUser === null || selectedUser.password !== loginObj.password
-      // 	? commit("loginError")
-      // 	: commit("loginSuccess")
-
-      if (selectedUser === null || selectedUser.password !== loginObj.password)
-        commit("loginError");
-      else {
-        //selectedUser(로그인 한 객체)를 loginSuccess가 commit되는 곳에 payload로 넘긴다.
-        commit("loginSuccess", selectedUser);
-        router.push({ name: "mypage" });
-      }
+    login({ commit }, loginObj) {
+      axios
+        .post("https://reqres.in/api/login", loginObj) //파라메터(body)
+        .then((res) => {
+          //성공 시 token: 블라블라(실제로는 user_id값을 받는다)
+          //토큰을 헤더에 포함시켜서 유저 정보를 요청
+          let token = res.data.token; //axios 스키마에서 토큰을 보낸다
+          let config = {
+            headers: {
+              "access-token": token,
+            },
+          };
+          axios
+            .get("https://reqres.in/api/user/2", config) //config를 헤더에 보낸다
+            .then((response) => {
+              let userInfo = {
+                color: response.data.data.color,
+                id: response.data.data.id,
+                name: response.data.data.name,
+                pantone_value: response.data.data.pantone_value,
+                year: response.data.data.year,
+              };
+              commit("loginSuccess", userInfo);
+              //commit('loginSuccess', response.data.data)
+              // => userInfo의 모든 정보를 보낼때 위와 같이 써도 되지만, 명세를 해주면 다른 개발자들과 협업을 할 때 더 보기 좋기 때문에 전자와 같이 하는게 좋다.
+            })
+            .catch(() => {
+              alert("이메일과 비밀번호를 확인하세요.");
+            });
+        })
+        .catch(() => {
+          alert("이메일과 비밀번호를 확인하세요.");
+        });
     },
 
     logout({ commit }) {
       commit("logout");
-      router.push({ name: "home" }); //로그아웃시 홈으로 이동
+      router.push({
+        name: "home",
+      }); //로그아웃시 홈으로 이동
     },
   },
   modules: {},

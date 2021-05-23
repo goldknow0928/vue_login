@@ -30,8 +30,8 @@
               >로그인</v-btn
             >
 
-            <v-btn @click="getTest">get Test</v-btn>
-            <v-btn @click="postTest">post Test</v-btn>
+            <!-- <v-btn @click="getTest">get Test</v-btn>
+            <v-btn @click="postTest">post Test</v-btn> -->
           </div>
         </v-card>
       </v-flex>
@@ -41,7 +41,6 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import axios from "axios";
 
 export default {
   name: "Login",
@@ -57,38 +56,38 @@ export default {
   methods: {
     ...mapActions(["login"]),
 
-    getTest() {
-      axios
-        .get("https://reqres.in/api/users?page=2")
-        .then((res) => {
-          //axios 에서는 꼭 화살표함수를 쓰자. 콜백함수에서 function을 쓰게 되면 this가 뷰 인스턴스를 가르키지 않고 function내부를 가르킨다. axios에서 받아온 data들을 뷰 내부에 할당을 해주려면 뷰를 가르켜야하기 때문이다.
+    // getTest() {
+    //   axios
+    //     .get("https://reqres.in/api/users?page=2")
+    //     .then((res) => {
+    //       //axios 에서는 꼭 화살표함수를 쓰자. 콜백함수에서 function을 쓰게 되면 this가 뷰 인스턴스를 가르키지 않고 function내부를 가르킨다. axios에서 받아온 data들을 뷰 내부에 할당을 해주려면 뷰를 가르켜야하기 때문이다.
 
-          // handle success
-          console.log(res);
-        })
-        .catch((err) => {
-          // handle error
-          console.log(err);
-        })
-        .then(() => {
-          // always executed
-          console.log("test");
-        });
-    },
+    //       // handle success
+    //       console.log(res);
+    //     })
+    //     .catch((err) => {
+    //       // handle error
+    //       console.log(err);
+    //     })
+    //     .then(() => {
+    //       // always executed
+    //       console.log("test");
+    //     });
+    // },
 
-    postTest() {
-      axios
-        .post("https://reqres.in/api/register", {
-          email: "eve.holt@reqres.in",
-          password: "pistol",
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    // postTest() {
+    //   axios
+    //     .post("https://reqres.in/api/register", {
+    //       email: "eve.holt@reqres.in",
+    //       password: "pistol",
+    //     })
+    //     .then((res) => {
+    //       console.log(res);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
   },
 };
 </script>
